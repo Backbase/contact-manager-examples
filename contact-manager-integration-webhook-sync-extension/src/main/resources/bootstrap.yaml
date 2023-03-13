@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: contact-manager-integration-webhook-sync-extension
