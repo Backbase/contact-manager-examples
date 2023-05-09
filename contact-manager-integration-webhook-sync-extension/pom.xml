@@ -5,24 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>service-sdk-starter-core</artifactId>
-        <groupId>com.backbase.buildingblocks</groupId>
-        <version>15.2.0</version>
+        <groupId>com.backbase.dbs.contact</groupId>
+        <artifactId>contact-manager-examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.backbase.dbs.contact</groupId>
     <artifactId>contact-manager-integration-webhook-sync-extension</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <swagger-annotations.version>1.6.6</swagger-annotations.version>
-        <jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
+        <swagger-annotations.version>1.6.8</swagger-annotations.version>
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <boat-maven-plugin.version>0.15.5</boat-maven-plugin.version>
         <specs.path>${project.build.directory}/specs/contact-manager</specs.path>
-        <contact-manager-integration-webhook-sync-api.version>1.0.0
-        </contact-manager-integration-webhook-sync-api.version>
+        <contact-manager-integration-webhook-sync-api.version>1.0.0</contact-manager-integration-webhook-sync-api.version>
         <backbase.specs.url>https://artifacts.backbase.com/specs</backbase.specs.url>
     </properties>
 
