@@ -21,8 +21,7 @@
         <jackson-databind-nullable.version>0.2.3</jackson-databind-nullable.version>
         <boat-maven-plugin.version>0.15.5</boat-maven-plugin.version>
         <specs.path>${project.build.directory}/specs/contact-manager</specs.path>
-        <contact-manager-integration-webhook-sync-api.version>1.0.0
-        </contact-manager-integration-webhook-sync-api.version>
+        <contact-manager-integration-webhook-sync-api.version>1.1.0</contact-manager-integration-webhook-sync-api.version>
         <backbase.specs.url>https://artifacts.backbase.com/specs</backbase.specs.url>
     </properties>
 
