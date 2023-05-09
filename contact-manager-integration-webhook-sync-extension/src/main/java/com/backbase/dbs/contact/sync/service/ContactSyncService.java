@@ -3,7 +3,6 @@ package com.backbase.dbs.contact.sync.service;
 import static java.util.Objects.isNull;
 
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
-import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactBulkSyncPostRequestBody;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncPostRequestBody;
 import com.backbase.dbs.contact.sync.core.CoreBankingSystemFacade;
 import lombok.RequiredArgsConstructor;
@@ -16,30 +15,6 @@ import org.springframework.stereotype.Service;
 public class ContactSyncService {
 
     private final CoreBankingSystemFacade coreBankingSystemFacade;
-
-    public void bulkSync(ContactBulkSyncPostRequestBody request) {
-        log.debug("Started core banking system BULK synchronization with parameters={}", request);
-
-        final var action = request.getAction();
-
-        request.getContacts()
-            .stream()
-            .map(contact -> new ContactSyncPostRequestBody()
-                .action(action)
-                .before(contact.getBefore())
-                .after(contact.getAfter())
-            )
-            .forEach(mappedRequest -> {
-                switch (action) {
-                    case CREATE -> syncContactCreation(mappedRequest);
-                    case UPDATE -> syncContactUpdate(mappedRequest);
-                    case DELETE -> syncContactDeletion(mappedRequest);
-                    default -> throw new UnsupportedOperationException();
-                }
-            });
-
-        log.info("Synchronization finished.");
-    }
 
     public void syncContact(ContactSyncPostRequestBody contactSyncRequest) {
         log.debug("Started core banking system synchronization with parameters={}", contactSyncRequest);
