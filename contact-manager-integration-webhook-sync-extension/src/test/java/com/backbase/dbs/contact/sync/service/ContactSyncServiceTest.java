@@ -7,14 +7,18 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
+import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactBulkSyncPostRequestBody;
+import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncBulkArrayElement;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncDetails;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncPostRequestBody;
 import com.backbase.dbs.contact.sync.core.CoreBankingSystemFacade;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,8 +37,32 @@ class ContactSyncServiceTest {
     private ContactSyncDetails contactSyncDetailsBeforeAction;
     @Mock
     private ContactSyncDetails contactSyncDetailsAfterAction;
+    @Mock
+    private ContactSyncDetails contactSyncDetailsAfterActionSecond;
     @InjectMocks
     private ContactSyncService contactSyncService;
+
+    @Nested
+    class Bulk {
+
+        @Test
+        void shouldStoreBulkCreate() {
+            final var request = new ContactBulkSyncPostRequestBody()
+                .action(CREATE)
+                .contacts(List.of(
+                    new ContactSyncBulkArrayElement()
+                        .after(contactSyncDetailsAfterAction),
+                    new ContactSyncBulkArrayElement()
+                        .after(contactSyncDetailsAfterActionSecond)
+                ));
+
+            contactSyncService.bulkSync(request);
+
+            final var inOrder = inOrder(coreBankingSystemFacade);
+            inOrder.verify(coreBankingSystemFacade).createContact(contactSyncDetailsAfterAction);
+            inOrder.verify(coreBankingSystemFacade).createContact(contactSyncDetailsAfterActionSecond);
+        }
+    }
 
     @Nested
     class SynchronizeContactCreationTest {
