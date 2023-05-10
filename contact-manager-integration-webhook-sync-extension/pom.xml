@@ -19,10 +19,21 @@
         <swagger-annotations.version>1.6.8</swagger-annotations.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <boat-maven-plugin.version>0.15.5</boat-maven-plugin.version>
-        <specs.path>${project.build.directory}/specs/contact-manager</specs.path>
-        <contact-manager-integration-webhook-sync-api.version>1.1.0</contact-manager-integration-webhook-sync-api.version>
-        <backbase.specs.url>https://artifacts.backbase.com/specs</backbase.specs.url>
+        <specs.path>${project.build.directory}/specs</specs.path>
+        <contact-manager-integration-webhook-sync-api.version>1.0.1</contact-manager-integration-webhook-sync-api.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.backbase</groupId>
+                <artifactId>backbase-bom</artifactId>
+                <version>2023.05</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -48,36 +59,28 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>wagon-maven-plugin</artifactId>
-                    <version>2.0.0</version>
-                    <configuration>
-                        <serverId>Backbase Artifactory Repository</serverId>
-                        <skipIfExists>true</skipIfExists>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>wagon-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>download-contact-manager-integration-webhook-sync-api</id>
+                        <id>unpack-integration-spec</id>
+                        <phase>initialize</phase>
                         <goals>
-                            <goal>download-single</goal>
+                            <goal>unpack</goal>
                         </goals>
-                        <phase>generate-sources</phase>
                         <configuration>
-                            <url>${backbase.specs.url}/contact-manager</url>
-                            <fromFile>
-                                contact-manager-integration-webhook-sync-api-v${contact-manager-integration-webhook-sync-api.version}.yaml
-                            </fromFile>
-                            <toDir>${specs.path}</toDir>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.backbase.dbs.contact</groupId>
+                                    <artifactId>contact-manager</artifactId>
+                                    <classifier>api</classifier>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${specs.path}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -95,7 +98,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                ${specs.path}/contact-manager-integration-webhook-sync-api-v${contact-manager-integration-webhook-sync-api.version}.yaml
+                                ${specs.path}/contact-manager/contact-manager-integration-webhook-sync-api-v${contact-manager-integration-webhook-sync-api.version}.yaml
                             </inputSpec>
                             <output>${project.build.directory}/generated-sources/</output>
                             <generateSupportingFiles>true</generateSupportingFiles>

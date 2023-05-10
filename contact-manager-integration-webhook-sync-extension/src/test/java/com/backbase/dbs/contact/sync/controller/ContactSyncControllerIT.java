@@ -12,7 +12,6 @@ import com.backbase.dbs.contact.sync.Application;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ class ContactSyncControllerIT {
 
     private static final String BASE_URL = "/service-api/v1/webhooks/contacts/sync";
     private static final String SYNC_CREATE_REQUEST_FILE = "/contact-sync-create-post-request-body.json";
-    private static final String SYNC_BULK_CREATE_REQUEST_FILE = "/contact-sync-bulk-create-post-request-body.json";
     private static final String SYNC_UPDATE_REQUEST_FILE = "/contact-sync-update-post-request-body.json";
     private static final String SYNC_DELETE_REQUEST_FILE = "/contact-sync-delete-post-request-body.json";
     @Autowired
@@ -37,32 +35,19 @@ class ContactSyncControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Nested
-    class Bulk {
-
-        @Test
-        void shouldBulkSyncCreation() throws Exception {
-            shouldBulkSync(SYNC_BULK_CREATE_REQUEST_FILE).andExpect(status().isOk());
-        }
+    @Test
+    void shouldSyncContactCreation() throws Exception {
+        shouldSyncContact(SYNC_CREATE_REQUEST_FILE).andExpect(status().isOk());
     }
 
-    @Nested
-    class OneEntry {
+    @Test
+    void shouldSyncContactUpdate() throws Exception {
+        shouldSyncContact(SYNC_UPDATE_REQUEST_FILE).andExpect(status().isOk());
+    }
 
-        @Test
-        void shouldSyncContactCreation() throws Exception {
-            shouldSyncContact(SYNC_CREATE_REQUEST_FILE).andExpect(status().isOk());
-        }
-
-        @Test
-        void shouldSyncContactUpdate() throws Exception {
-            shouldSyncContact(SYNC_UPDATE_REQUEST_FILE).andExpect(status().isOk());
-        }
-
-        @Test
-        void shouldSyncContactDeletion() throws Exception {
-            shouldSyncContact(SYNC_DELETE_REQUEST_FILE).andExpect(status().isOk());
-        }
+    @Test
+    void shouldSyncContactDeletion() throws Exception {
+        shouldSyncContact(SYNC_DELETE_REQUEST_FILE).andExpect(status().isOk());
     }
 
     @Nested
@@ -106,10 +91,6 @@ class ContactSyncControllerIT {
         }
     }
 
-    private ResultActions shouldBulkSync(String requestFileName) throws Exception {
-        return shouldSyncContact(readFile(requestFileName), "bulk");
-    }
-
     private ResultActions shouldSyncContact(String requestFileName) throws Exception {
         return shouldSyncContact(readFile(requestFileName));
     }
@@ -119,15 +100,7 @@ class ContactSyncControllerIT {
     }
 
     private ResultActions shouldSyncContact(byte[] bytes) throws Exception {
-        return shouldSyncContact(bytes, null);
-    }
-
-    private ResultActions shouldSyncContact(byte[] bytes, String path) throws Exception {
-        final var endpoint = Optional.ofNullable(path)
-            .map(p -> BASE_URL + "/" + p)
-            .orElse(BASE_URL);
-
-        return mockMvc.perform(post(endpoint)
+        return mockMvc.perform(post(BASE_URL)
                 .header("Authorization", TEST_SERVICE_BEARER)
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8.name())
