@@ -16,7 +16,6 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <swagger-annotations.version>2.2.15</swagger-annotations.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <boat-maven-plugin.version>0.17.21</boat-maven-plugin.version>
         <archunit.skip>true</archunit.skip>
@@ -32,7 +31,6 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openapitools</groupId>
