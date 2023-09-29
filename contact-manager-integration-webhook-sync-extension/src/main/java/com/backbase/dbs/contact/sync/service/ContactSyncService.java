@@ -3,6 +3,7 @@ package com.backbase.dbs.contact.sync.service;
 import static java.util.Objects.isNull;
 
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
+import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactBulkSyncPostRequestBody;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncPostRequestBody;
 import com.backbase.dbs.contact.sync.core.CoreBankingSystemFacade;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Service;
 public class ContactSyncService {
 
     private final CoreBankingSystemFacade coreBankingSystemFacade;
+
+    public void bulkSync(ContactBulkSyncPostRequestBody contactBulkSyncPostRequestBody) {
+        log.debug("Started core banking system BULK synchronization with parameter={}", contactBulkSyncPostRequestBody);
+        coreBankingSystemFacade.bulkSync(contactBulkSyncPostRequestBody);
+    }
 
     public void syncContact(ContactSyncPostRequestBody contactSyncRequest) {
         log.debug("Started core banking system synchronization with parameters={}", contactSyncRequest);

@@ -7,11 +7,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
+import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactBulkSyncPostRequestBody;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncDetails;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncPostRequestBody;
 import com.backbase.dbs.contact.sync.core.CoreBankingSystemFacade;
@@ -121,5 +123,20 @@ class ContactSyncServiceTest {
 
             verifyNoInteractions(coreBankingSystemFacade);
         }
+    }
+
+    @Nested
+    class BulkSync {
+
+        @Test
+        void shouldSyncBulk() {
+            final var mockRequest = mock(ContactBulkSyncPostRequestBody.class);
+
+            doNothing().when(coreBankingSystemFacade).bulkSync(mockRequest);
+            contactSyncService.bulkSync(mockRequest);
+
+            verify(coreBankingSystemFacade).bulkSync(mockRequest);
+        }
+
     }
 }
