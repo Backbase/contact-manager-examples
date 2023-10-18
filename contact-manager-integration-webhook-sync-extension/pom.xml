@@ -56,7 +56,7 @@
                 <artifactId>wagon-maven-plugin</artifactId>
                 <version>${wagon-maven-plugin.version}</version>
                 <configuration>
-                    <serverId>Backbase Repository</serverId>
+                    <serverId>backbase</serverId>
                     <skipIfExists>true</skipIfExists>
                 </configuration>
                 <executions>
