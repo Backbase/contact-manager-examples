@@ -1,5 +1,6 @@
 package com.backbase.dbs.contact.sync.core;
 
+import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactBulkSyncPostRequestBody;
 import com.backbase.dbs.contact.integration.webhook.sync.v1.model.ContactSyncDetails;
 
 public interface CoreBankingSystemFacade {
@@ -10,4 +11,5 @@ public interface CoreBankingSystemFacade {
 
     void deleteContact(ContactSyncDetails deletedContact);
 
+    void bulkSync(ContactBulkSyncPostRequestBody contactBulkSyncPostRequestBody);
 }
